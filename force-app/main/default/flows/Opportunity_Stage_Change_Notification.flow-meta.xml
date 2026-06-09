@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Notifies the opportunity owner&apos;s manager when the stage changes to Proposal/Price Quote or beyond. This flow demonstrates stage change detection and email notifications - perfect for consolidation with other opportunity automation.</description>
+    <environments>Default</environments>
+    <interviewLabel>Opportunity Stage Change Notification {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Opportunity Stage Change Notification</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Last_Stage_Change_Date</name>
+        <label>Update Last Stage Change Date</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue>Stage changed to {!$Record.StageName} - Manager notified on {!$Flow.CurrentDateTime}</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Update_Last_Stage_Change_Date</targetReference>
+        </connector>
+        <filterFormula>AND(
+  ISCHANGED({!$Record.StageName}),
+  OR(
+    ISPICKVAL({!$Record.StageName}, &apos;Proposal/Price Quote&apos;),
+    ISPICKVAL({!$Record.StageName}, &apos;Negotiation/Review&apos;),
+    ISPICKVAL({!$Record.StageName}, &apos;Closed Won&apos;)
+  ),
+  NOT(ISBLANK({!$Record.Owner.ManagerId}))
+)</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>

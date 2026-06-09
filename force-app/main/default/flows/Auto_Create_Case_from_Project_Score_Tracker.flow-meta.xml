@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <name>Decision_Case_Exists</name>
+        <label>Decision: Case Exists?</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Create_Case</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No - Create Case</defaultConnectorLabel>
+        <rules>
+            <name>Case_Already_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Check_Existing_Case</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <label>Yes - Case Exists</label>
+        </rules>
+    </decisions>
+    <description>Automatically creates a Case record when a new Project Score Tracker record is created. Ensures no duplicate Cases are created for the same Project Score Tracker.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>formula_CaseDescription</name>
+        <dataType>String</dataType>
+        <expression>&quot;A new Project Score Tracker has been created. &quot; &amp; 
+&quot;Project Score Tracker Name: &quot; &amp; {!$Record.Name} &amp; &quot; &quot; &amp; 
+&quot;Score: &quot; &amp; TEXT({!$Record.Score__c}) &amp; &quot; &quot; &amp; 
+&quot;Category: &quot; &amp; TEXT({!$Record.Category__c}) &amp; &quot; &quot; &amp; 
+&quot;Weighted Score: &quot; &amp; IF(ISBLANK({!$Record.Weighted_Score__c}), &quot;N/A&quot;, TEXT({!$Record.Weighted_Score__c})) &amp; &quot; &quot; &amp; 
+&quot;Please review and take appropriate action.&quot;</expression>
+    </formulas>
+    <formulas>
+        <name>formula_CaseSubject</name>
+        <dataType>String</dataType>
+        <expression>&quot;New Project Score Tracker: &quot; &amp; {!$Record.Name}</expression>
+    </formulas>
+    <interviewLabel>Auto Create Case from Project Score Tracker {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Auto Create Case from Project Score Tracker</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <name>Create_Case</name>
+        <label>Create Case</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <elementReference>formula_CaseDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Origin</field>
+            <value>
+                <stringValue>Web</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Priority</field>
+            <value>
+                <elementReference>$Record.Category__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Project_Score_Tracker__c</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>New</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <elementReference>formula_CaseSubject</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Other</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordLookups>
+        <name>Check_Existing_Case</name>
+        <label>Check Existing Case</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Decision_Case_Exists</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Project_Score_Tracker__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_Existing_Case</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Score__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Project_Score_Tracker__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Project_Score_Tracker__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Lookup to the related Project Score Tracker record that triggered the creation of this Case</description>
+    <inlineHelpText>The Project Score Tracker record associated with this case</inlineHelpText>
+    <label>Project Score Tracker</label>
+    <referenceTo>Project_Score_Tracker__c</referenceTo>
+    <relationshipLabel>Cases</relationshipLabel>
+    <relationshipName>Cases</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

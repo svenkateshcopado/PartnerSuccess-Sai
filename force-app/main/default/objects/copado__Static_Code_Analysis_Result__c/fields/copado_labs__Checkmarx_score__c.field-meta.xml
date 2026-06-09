@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>copado_labs__Checkmarx_score__c</fullName>
+    <deprecated>false</deprecated>
+    <label>Checkmarx score</label>
+    <summarizedField>copado__Static_Code_Analysis_Violation__c.copado_labs__Checkmarx_score__c</summarizedField>
+    <summaryForeignKey>copado__Static_Code_Analysis_Violation__c.copado__Static_Code_Analysis_Result__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

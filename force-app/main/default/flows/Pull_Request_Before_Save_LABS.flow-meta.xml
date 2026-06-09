@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <environments>Default</environments>
+    <formulas>
+        <name>Total_Reviewers_Requested_Formula</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+  CONTAINS({!$Record.copado__Requested_Reviewers_Long__c},{!$Record.copado__Username__c}),
+  LEN({!$Record.copado__Requested_Reviewers_Long__c}) - LEN(SUBSTITUTE({!$Record.copado__Requested_Reviewers_Long__c}, &quot;,&quot;,&quot;&quot;)),
+  (LEN({!$Record.copado__Requested_Reviewers_Long__c}) - LEN(SUBSTITUTE({!$Record.copado__Requested_Reviewers_Long__c}, &quot;,&quot;,&quot;&quot;))) + 1
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <formulas>
+        <name>Total_Reviewers_Required_Formula</name>
+        <dataType>Number</dataType>
+        <expression>IF(
+  CONTAINS({!$Record.copado__Requested_Reviewers_Long__c},{!$Record.copado__Username__c}&amp;&quot; (Required)&quot;),
+  ((LEN({!$Record.copado__Requested_Reviewers_Long__c}) - LEN(SUBSTITUTE({!$Record.copado__Requested_Reviewers_Long__c},&quot;(Required)&quot;,&quot;&quot;))) / 10) - 1,
+  (LEN({!$Record.copado__Requested_Reviewers_Long__c}) - LEN(SUBSTITUTE({!$Record.copado__Requested_Reviewers_Long__c},&quot;(Required)&quot;,&quot;&quot;))) / 10
+)</expression>
+        <scale>2</scale>
+    </formulas>
+    <interviewLabel>Pull Request Before Save LABS {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Pull Request Before Save LABS</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>UpdateoldReviwersrecord</name>
+        <label>UpdateoldReviwersrecord</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Total_Reviewers_Requested_Long__c</field>
+            <value>
+                <elementReference>Total_Reviewers_Requested_Formula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Total_Reviewers_Required_Long__c</field>
+            <value>
+                <elementReference>Total_Reviewers_Required_Formula</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>UpdateoldReviwersrecord</targetReference>
+        </connector>
+        <filterLogic>1 OR 2</filterLogic>
+        <filters>
+            <field>copado__Requested_Reviewers_Long__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>copado__Requested_Reviewers_Long__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>copado__Pull_Request__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

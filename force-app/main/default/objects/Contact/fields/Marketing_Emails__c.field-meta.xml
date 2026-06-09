@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Marketing_Emails__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Indicates whether this contact should receive marketing emails. Automatically set to false when contact opts out of email.</description>
+    <inlineHelpText>This field is automatically updated based on the Email Opt Out setting.</inlineHelpText>
+    <label>Marketing Emails</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

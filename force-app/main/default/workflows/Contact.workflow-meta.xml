@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Marketing_Emails_to_False</fullName>
+        <description>Sets the Marketing Emails checkbox to false when contact opts out</description>
+        <field>Marketing_Emails__c</field>
+        <literalValue>false</literalValue>
+        <name>Update Marketing Emails to False</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Contact_Email_Opt_Out_Sync</fullName>
+        <actions>
+            <name>Update_Marketing_Emails_to_False</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Automatically updates the Marketing Emails checkbox when a contact opts out of email communications</description>
+        <formula>HasOptedOutOfEmail = TRUE</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

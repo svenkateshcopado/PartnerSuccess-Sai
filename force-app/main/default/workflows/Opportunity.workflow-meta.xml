@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Probability_to_75</fullName>
+        <description>Sets the Probability to 75% when stage changes to Proposal/Price Quote</description>
+        <field>Probability</field>
+        <literalValue>75</literalValue>
+        <name>Update Probability to 75%</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>High_Value_Opportunity_Alert</fullName>
+        <actions>
+            <name>Create_Follow_Up_Task</name>
+            <type>Task</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Opportunity.Amount</field>
+            <operation>greaterOrEqual</operation>
+            <value>100000</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Opportunity.StageName</field>
+            <operation>notEqual</operation>
+            <value>Closed Won</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Opportunity.StageName</field>
+            <operation>notEqual</operation>
+            <value>Closed Lost</value>
+        </criteriaItems>
+        <description>Demo Workflow Rule: Automatically creates a follow-up task when an Opportunity reaches $100,000 or more.</description>
+        <failedMigrationToolVersion>260.10.1</failedMigrationToolVersion>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Opportunity_Stage_Probability_Sync</fullName>
+        <actions>
+            <name>Update_Probability_to_75</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <description>Automatically updates Probability to 75% when Opportunity Stage changes to Proposal/Price Quote. Perfect for training workshops - demonstrates ISCHANGED() function and stage-based automation.</description>
+        <formula>ISCHANGED(StageName) &amp;&amp; ISPICKVAL(StageName, &quot;Proposal/Price Quote&quot;)</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <tasks>
+        <fullName>Create_Follow_Up_Task</fullName>
+        <assignedToType>owner</assignedToType>
+        <description>This opportunity has reached $100,000 or more. Please schedule an executive review.</description>
+        <dueDateOffset>3</dueDateOffset>
+        <notifyAssignee>false</notifyAssignee>
+        <priority>High</priority>
+        <protected>false</protected>
+        <status>Not Started</status>
+        <subject>Follow up on high-value opportunity</subject>
+    </tasks>
+</Workflow>
