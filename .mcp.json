@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "agentia": {
+      "args": [
+        "mcp",
+        "start"
+      ],
+      "command": "agentia",
+      "env": {
+        "AGENTIA_PROJECT_ROOT": "${CLAUDE_PROJECT_DIR:-}"
+      },
+      "type": "stdio"
+    }
+  }
+}
