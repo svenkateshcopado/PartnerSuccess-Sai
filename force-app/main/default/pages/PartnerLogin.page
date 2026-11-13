@@ -1,0 +1,32 @@
+<apex:page showHeader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false" docType="html-5.0">
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Partner Login</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f3f4f6; }
+        .wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
+        .card { background: #ffffff; width: 100%; max-width: 380px; padding: 32px 28px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.12); }
+        h1 { margin: 0 0 24px 0; font-size: 24px; text-align: center; color: #1f2937; }
+        label { display: block; margin-bottom: 6px; font-size: 14px; color: #374151; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px 12px; margin-bottom: 18px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #0070d2; color: #ffffff; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #005fb2; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="card">
+            <h1>Partner Login</h1>
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" autocomplete="off" />
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autocomplete="off" />
+            <button type="button">Login</button>
+        </div>
+    </div>
+</body>
+</html>
+</apex:page>
